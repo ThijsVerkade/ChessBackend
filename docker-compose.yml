@@ -1,0 +1,49 @@
+version: '3'
+services:
+    application-service:
+        container_name: chess-backend-application
+        build:
+            context: docker/application
+        volumes:
+            - ./:/var/www
+            - ~/.composer/docker-cache/:/root/.composer:cached
+        restart: unless-stopped
+        depends_on:
+            - database-service
+        networks:
+            - chess-backend
+
+    web-service:
+        container_name: chess-backend-service
+        build:
+            context: docker/web
+        volumes:
+            - ./:/var/www
+        ports:
+            - "8080:80"
+        restart: unless-stopped
+        depends_on:
+            - application-service
+        networks:
+            - chess-backend
+
+    database-service:
+        container_name: chess-backend-database
+        build:
+            context: docker/database
+        volumes:
+            - ./docker/database/data:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        restart: unless-stopped
+        networks:
+            - chess-backend
+
+networks:
+    chess-backend:
+        driver: bridge
