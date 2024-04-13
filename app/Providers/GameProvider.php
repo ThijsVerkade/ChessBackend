@@ -4,14 +4,6 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use Src\ChessGame\Application\Handlers\GameHandler;
-use Src\ChessGame\Application\Handlers\IGameHandler;
-use Src\ChessGame\Application\Projectors\GameProjection;
-use Src\ChessGame\Application\Read\IAggregateGameQueries;
-use Src\ChessGame\Domain\ChessGame;
-use Src\ChessGame\Domain\Repositories\IGameRepository;
-use Src\ChessGame\Infrastructure\Persistence\GameRepository;
-use Src\ChessGame\Infrastructure\Read\AggregateGameQueries;
 use EventSauce\EventSourcing\AggregateRootRepository;
 use EventSauce\EventSourcing\EventSourcedAggregateRootRepository;
 use EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer;
@@ -22,6 +14,14 @@ use EventSauce\UuidEncoding\BinaryUuidEncoder;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
+use Src\ChessGame\Application\Handlers\GameHandler;
+use Src\ChessGame\Application\Handlers\IGameHandler;
+use Src\ChessGame\Application\Projectors\GameProjection;
+use Src\ChessGame\Application\Read\IAggregateGameQueries;
+use Src\ChessGame\Application\Repositories\IGameRepository;
+use Src\ChessGame\Domain\ChessGame;
+use Src\ChessGame\Infrastructure\Persistence\GameRepository;
+use Src\ChessGame\Infrastructure\Read\AggregateGameQueries;
 
 class GameProvider extends ServiceProvider
 {

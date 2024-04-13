@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="/Users/Thijs.Verkade/workspace/chess/chess-backend/phpunit-unit.xml" tests="6" assertions="71" errors="1" failures="0" skipped="0" time="0.007518">
+    <testsuite name="Unit" tests="6" assertions="71" errors="1" failures="0" skipped="0" time="0.007518">
+      <testsuite name="Tests\Unit\src\ChessGame\Domain\Piece\BishopTest" file="/Users/Thijs.Verkade/workspace/chess/chess-backend/tests/Unit/src/ChessGame/Domain/Piece/BishopTest.php" tests="1" assertions="12" errors="0" failures="0" skipped="0" time="0.003264">
+        <testcase name="testAvailableMoves" file="/Users/Thijs.Verkade/workspace/chess/chess-backend/tests/Unit/src/ChessGame/Domain/Piece/BishopTest.php" line="22" class="Tests\Unit\src\ChessGame\Domain\Piece\BishopTest" classname="Tests.Unit.src.ChessGame.Domain.Piece.BishopTest" assertions="12" time="0.003264"/>
+      </testsuite>
+      <testsuite name="Tests\Unit\src\ChessGame\Domain\Piece\PieceTest" file="/Users/Thijs.Verkade/workspace/chess/chess-backend/tests/Unit/src/ChessGame/Domain/Piece/PieceTest.php" tests="1" assertions="0" errors="1" failures="0" skipped="0" time="0.003229">
+        <testcase name="testFromPieceTypeFunctionReturnsInitializedPieceClassByPieceType" file="/Users/Thijs.Verkade/workspace/chess/chess-backend/tests/Unit/src/ChessGame/Domain/Piece/PieceTest.php" line="15" class="Tests\Unit\src\ChessGame\Domain\Piece\PieceTest" classname="Tests.Unit.src.ChessGame.Domain.Piece.PieceTest" assertions="0" time="0.003229">
+          <error type="PHPUnit\Framework\UnknownClassOrInterfaceException">Tests\Unit\src\ChessGame\Domain\Piece\PieceTest::testFromPieceTypeFunctionReturnsInitializedPieceClassByPieceType
+PHPUnit\Framework\UnknownClassOrInterfaceException: Class or interface "king" does not exist
+
+/Users/Thijs.Verkade/workspace/chess/chess-backend/tests/Unit/src/ChessGame/Domain/Piece/PieceTest.php:23</error>
+        </testcase>
+      </testsuite>
+      <testsuite name="Tests\Unit\src\ChessGame\Domain\Piece\KnightTest" file="/Users/Thijs.Verkade/workspace/chess/chess-backend/tests/Unit/src/ChessGame/Domain/Piece/KnightTest.php" tests="1" assertions="12" errors="0" failures="0" skipped="0" time="0.000269">
+        <testcase name="testAvailableMoves" file="/Users/Thijs.Verkade/workspace/chess/chess-backend/tests/Unit/src/ChessGame/Domain/Piece/KnightTest.php" line="23" class="Tests\Unit\src\ChessGame\Domain\Piece\KnightTest" classname="Tests.Unit.src.ChessGame.Domain.Piece.KnightTest" assertions="12" time="0.000269"/>
+      </testsuite>
+      <testsuite name="Tests\Unit\src\ChessGame\Domain\Piece\RookTest" file="/Users/Thijs.Verkade/workspace/chess/chess-backend/tests/Unit/src/ChessGame/Domain/Piece/RookTest.php" tests="1" assertions="16" errors="0" failures="0" skipped="0" time="0.000243">
+        <testcase name="testAvailableMoves" file="/Users/Thijs.Verkade/workspace/chess/chess-backend/tests/Unit/src/ChessGame/Domain/Piece/RookTest.php" line="25" class="Tests\Unit\src\ChessGame\Domain\Piece\RookTest" classname="Tests.Unit.src.ChessGame.Domain.Piece.RookTest" assertions="16" time="0.000243"/>
+      </testsuite>
+      <testsuite name="Tests\Unit\src\ChessGame\Domain\Piece\QueenTest" file="/Users/Thijs.Verkade/workspace/chess/chess-backend/tests/Unit/src/ChessGame/Domain/Piece/QueenTest.php" tests="1" assertions="26" errors="0" failures="0" skipped="0" time="0.000279">
+        <testcase name="testAvailableMoves" file="/Users/Thijs.Verkade/workspace/chess/chess-backend/tests/Unit/src/ChessGame/Domain/Piece/QueenTest.php" line="25" class="Tests\Unit\src\ChessGame\Domain\Piece\QueenTest" classname="Tests.Unit.src.ChessGame.Domain.Piece.QueenTest" assertions="26" time="0.000279"/>
+      </testsuite>
+      <testsuite name="Tests\Unit\src\ChessGame\Domain\Piece\PawnTest" file="/Users/Thijs.Verkade/workspace/chess/chess-backend/tests/Unit/src/ChessGame/Domain/Piece/PawnTest.php" tests="1" assertions="5" errors="0" failures="0" skipped="0" time="0.000234">
+        <testcase name="testAvailableMoves" file="/Users/Thijs.Verkade/workspace/chess/chess-backend/tests/Unit/src/ChessGame/Domain/Piece/PawnTest.php" line="24" class="Tests\Unit\src\ChessGame\Domain\Piece\PawnTest" classname="Tests.Unit.src.ChessGame.Domain.Piece.PawnTest" assertions="5" time="0.000234"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

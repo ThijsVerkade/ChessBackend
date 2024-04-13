@@ -259,11 +259,10 @@ final class Board
         $positions = [];
 
         if (
-            (
+            ((
                 $piece->type === PieceType::Queen ||
                 $piece->type === PieceType::Rook
-            ) &&
-            $startX === $endX || $startY === $endY
+            ) && $startX === $endX) || $startY === $endY
         ) {
             if ($startX === $endX) {
                 $step = ($startY < $endY) ? 1 : -1;

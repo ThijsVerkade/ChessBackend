@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Src\ChessGame\Application\Projectors;
 
-use Src\ChessGame\Domain\Events;
-use Src\ChessGame\Domain\Repositories\IGameRepository;
 use EventSauce\EventSourcing\EventConsumption\EventConsumer;
 use EventSauce\EventSourcing\Message;
+use Src\ChessGame\Application\Repositories\IGameRepository;
+use Src\ChessGame\Domain\Events;
 
 final class GameProjection extends EventConsumer
 {

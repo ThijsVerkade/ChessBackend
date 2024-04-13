@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Src\ChessGame\Application\Services;
 
+use EventSauce\EventSourcing\AggregateRootRepository;
 use Src\ChessGame\Domain\ChessGame;
 use Src\ChessGame\Domain\Enum\RenderableFileType;
-use Src\ChessGame\Domain\Repositories\IGameRepository;
 use Src\ChessGame\Domain\ValueObject\GameAggregateId;
-use Src\ChessGame\Domain\ValueObject\Square;
-use EventSauce\EventSourcing\AggregateRootRepository;
 
 class ChessboardRendererService
 {

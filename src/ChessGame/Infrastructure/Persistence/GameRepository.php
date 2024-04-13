@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Src\ChessGame\Infrastructure\Persistence;
 
-use Src\ChessGame\Domain\Events;
-use Src\ChessGame\Domain\Repositories\IGameRepository;
 use EventSauce\EventSourcing\Message;
 use Illuminate\Support\Facades\DB;
+use Src\ChessGame\Application\Repositories\IGameRepository;
+use Src\ChessGame\Domain\Events;
 
 class GameRepository implements IGameRepository
 {

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Src\ChessGame\Domain;
 
+use Src\ChessGame\Application\EngineAdapterInterface;
 use Src\ChessGame\Domain\Enum\Color;
 use Src\ChessGame\Domain\Enum\PieceType;
 use Src\ChessGame\Domain\Events\GameStarted;
-use Src\ChessGame\Domain\ValueObject\Move;
 use Src\ChessGame\Domain\ValueObject\Player;
 use Src\ChessGame\Domain\ValueObject\Position;
 use Src\ChessGame\Domain\ValueObject\Square;
@@ -19,6 +19,10 @@ final class ChessGame implements AggregateRoot
 {
     use AggregateRootBehaviour;
     use ChessGameEvents;
+
+    public function __construct(private readonly EngineAdapterInterface $engine)
+    {
+    }
 
     public Board $board;
 

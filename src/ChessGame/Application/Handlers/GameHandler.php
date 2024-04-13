@@ -15,11 +15,10 @@ use Src\ChessGame\Domain\ValueObject\Position;
 use EventSauce\EventSourcing\AggregateRootRepository;
 use Exception;
 
-class GameHandler implements IGameHandler
+readonly class GameHandler implements IGameHandler
 {
-    public function __construct(
-        private readonly AggregateRootRepository $aggregateRootRepository
-    ) {
+    public function __construct(private AggregateRootRepository $aggregateRootRepository)
+    {
     }
 
     #[\Override]
@@ -38,7 +37,6 @@ class GameHandler implements IGameHandler
     {
         /** @var ChessGame $aggregateRoot */
         $aggregateRoot = $this->aggregateRootRepository->retrieve($drawGameCommand->gameAggregateId);
-
         $this->aggregateRootRepository->persist($aggregateRoot);
     }
 

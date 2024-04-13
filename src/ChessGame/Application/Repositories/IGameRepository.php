@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Src\ChessGame\Domain\Repositories;
+namespace Src\ChessGame\Application\Repositories;
 
-use Src\ChessGame\Domain\Events;
 use EventSauce\EventSourcing\Message;
+use Src\ChessGame\Domain\Events;
 
 interface IGameRepository
 {
