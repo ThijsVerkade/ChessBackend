@@ -21,3 +21,9 @@ Homestead.yaml
 Homestead.json
 /.vagrant
 .phpunit.result.cache
+/.idea
+
+resources/*
+!resources/json-schemas/
+**/api-docs/
+**/api-docs/*
