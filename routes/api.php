@@ -19,8 +19,10 @@ Route::prefix('game')
         Route::post('/start', Game\StartGameController::class);
         Route::post('/{gameId}/continue', Game\ContinueGameController::class);
         Route::post('/{gameId}/move-piece', Game\MovePieceController::class);
-        Route::put('/{gameId}/resign', Game\StartGameController::class);
+        Route::get('/{gameId}/opponent-move', Game\OpponentMoveController::class);
+        Route::put('/{gameId}/resign', Game\ResignGameController::class);
         Route::put('/{gameId}/draw', Game\StartGameController::class);
         Route::get('/{gameId}/events', Game\RetrieveEventsController::class);
+        Route::post('/{gameId}/available-positions', Game\GetAvailablePositionsController::class);
         Route::put('/{gameId}/promote-pawn', Game\PromotePawnController::class);
     });

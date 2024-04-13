@@ -6,11 +6,11 @@ namespace Domain\ChessGame\Domain\ValueObject;
 
 use Exception;
 
-final class Position
+final readonly class Position
 {
     public function __construct(
-        public readonly int $x,
-        public readonly int $y,
+        public int $x,
+        public int $y,
     ) {
     }
 

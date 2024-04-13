@@ -27,14 +27,14 @@ final class PromotePawnController extends Controller
             'pieceType' => 'required',
         ]);
 
-        $board = $this->gameHandler->handlePromotePawn(new PromotePawnCommand(
+        $chessGame = $this->gameHandler->handlePromotePawn(new PromotePawnCommand(
             GameAggregateId::fromString($gameUuid),
             Position::fromMove($validated['position']),
             PieceType::from($validated['pieceType'])
         ));
 
         return new JsonResponse([
-            'board' => $board->board
+            'board' => $chessGame->board
         ]);
     }
 }

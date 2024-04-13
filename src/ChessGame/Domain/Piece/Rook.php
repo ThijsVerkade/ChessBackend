@@ -17,11 +17,13 @@ final class Rook extends Piece
         parent::__construct($color, Enum\PieceType::Rook);
     }
 
+    #[\Override]
     public function canMove(
         Position $startPosition,
         Position $endPosition,
         Board $board,
-        bool $withoutOwnColor = true
+        bool $withoutOwnColor = true,
+        bool $withoutKing = false
     ): bool {
         $startX = $startPosition->x;
         $startY = $startPosition->y;
@@ -39,7 +41,10 @@ final class Rook extends Piece
             // Move is vertical
             $step = ($startY < $endY) ? 1 : -1;
             for ($y = $startY + $step; $y !== $endY; $y += $step) {
-                if ($board->squares[$y][$startX]->piece instanceof Piece) {
+                if (
+                    $board->squares[$y][$startX]->piece instanceof Piece &&
+                    (!$withoutKing || $board->squares[$y][$startX]->piece->type !== Enum\PieceType::King)
+                ) {
                     return false;
                 }
             }
@@ -47,7 +52,10 @@ final class Rook extends Piece
             // Move is horizontal
             $step = ($startX < $endX) ? 1 : -1;
             for ($x = $startX + $step; $x !== $endX; $x += $step) {
-                if ($board->squares[$startY][$x]->piece instanceof Piece) {
+                if (
+                    $board->squares[$startY][$x]->piece instanceof Piece  &&
+                    (!$withoutKing || $board->squares[$startY][$x]->piece->type !== Enum\PieceType::King)
+                ) {
                     return false;
                 }
             }
@@ -66,5 +74,18 @@ final class Rook extends Piece
 
         // Move is valid
         return $endSquare->piece->color !== $this->color;
+    }
+
+    #[\Override]
+    public function availableMoves(Position $position, Board $board): array
+    {
+        $directions = [
+            [-1, 0], // Up
+            [1, 0],  // Down
+            [0, -1], // Left
+            [0, 1],  // Right
+        ];
+
+        return $this->getMovesOfPositionByDirections($directions, $position, $board);
     }
 }

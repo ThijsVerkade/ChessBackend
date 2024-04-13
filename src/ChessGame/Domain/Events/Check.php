@@ -8,14 +8,15 @@ use Domain\ChessGame\Domain\Enum\Color;
 use Domain\ChessGame\Domain\ValueObject\Position;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
-final class Check implements SerializablePayload
+final readonly class Check implements SerializablePayload
 {
     public function __construct(
-        public readonly Color $color,
-        public readonly Position $position
+        public Color $color,
+        public Position $position
     ) {
     }
 
+    #[\Override]
     public function toPayload(): array
     {
         return [
@@ -24,6 +25,7 @@ final class Check implements SerializablePayload
         ];
     }
 
+    #[\Override]
     public static function fromPayload(array $payload): static
     {
         return new self(

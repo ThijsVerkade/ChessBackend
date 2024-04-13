@@ -1,7 +1,0 @@
-parameters:
-    level: 4
-    paths:
-        - app
-        - config
-        - src
-        - tests

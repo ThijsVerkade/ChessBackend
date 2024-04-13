@@ -10,7 +10,7 @@ use Domain\ChessGame\Domain\Piece\King;
 use Domain\ChessGame\Domain\Piece\Piece;
 use PHPUnit\Framework\TestCase;
 
-final class PieceTest extends TestCase
+class PieceTest extends TestCase
 {
     public function testFromPieceTypeFunctionReturnsInitializedPieceClassByPieceType(): void
     {
@@ -20,6 +20,6 @@ final class PieceTest extends TestCase
         /** @var King $piece */
         $piece = Piece::fromPieceType($color, $pieceType);
 
-        self::assertInstanceOf($pieceType->value, $piece);
+        $this->assertSame($pieceType, $piece->type);
     }
 }

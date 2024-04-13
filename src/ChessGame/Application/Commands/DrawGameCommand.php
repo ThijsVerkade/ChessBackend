@@ -6,10 +6,10 @@ namespace Domain\ChessGame\Application\Commands;
 
 use Domain\ChessGame\Domain\ValueObject\GameAggregateId;
 
-final class DrawGameCommand
+final readonly class DrawGameCommand
 {
     public function __construct(
-        public readonly GameAggregateId $gameAggregateId,
+        public GameAggregateId $gameAggregateId,
     ) {
     }
 }

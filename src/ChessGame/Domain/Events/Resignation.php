@@ -7,13 +7,14 @@ namespace Domain\ChessGame\Domain\Events;
 use Domain\ChessGame\Domain\Enum\Color;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
-final class Resignation implements SerializablePayload
+final readonly class Resignation implements SerializablePayload
 {
     public function __construct(
-        public readonly Color $resignedColor,
+        public Color $resignedColor,
     ) {
     }
 
+    #[\Override]
     public function toPayload(): array
     {
         return [
@@ -21,6 +22,7 @@ final class Resignation implements SerializablePayload
         ];
     }
 
+    #[\Override]
     public static function fromPayload(array $payload): static
     {
         return new self(Color::from($payload['resigned_color']));

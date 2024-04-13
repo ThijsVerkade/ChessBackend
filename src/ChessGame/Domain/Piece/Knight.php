@@ -15,11 +15,13 @@ final class Knight extends Piece
         parent::__construct($color, Enum\PieceType::Knight);
     }
 
+    #[\Override]
     public function canMove(
         Position $startPosition,
         Position $endPosition,
         Board $board,
-        bool $withoutOwnColor = true
+        bool $withoutOwnColor = true,
+        bool $withoutKing = false
     ): bool {
         $startX = $startPosition->x;
         $startY = $startPosition->y;
@@ -33,7 +35,7 @@ final class Knight extends Piece
         if ($dx == 1 && $dy == 2) {
             // Check if the ending position is empty or contains an opposing piece
             // Invalid move
-            return !$board->getSquareByPosition($endPosition)->piece instanceof \Domain\ChessGame\Domain\Piece\Piece ||
+            return !$board->getSquareByPosition($endPosition)->piece instanceof Piece ||
                 ($this->isOpposingPiece($board->getSquareByPosition($endPosition)->piece));
         }
 
@@ -41,13 +43,49 @@ final class Knight extends Piece
             // Invalid move
             return false;
         }
+
         if ($dy != 1) {
             // Invalid move
             return false;
         }
+
         // Check if the ending position is empty or contains an opposing piece
         // Invalid move
-        return !$board->getSquareByPosition($endPosition)->piece instanceof \Domain\ChessGame\Domain\Piece\Piece ||
+        return !$board->getSquareByPosition($endPosition)->piece instanceof Piece ||
             ($this->isOpposingPiece($board->getSquareByPosition($endPosition)->piece));
+    }
+
+    #[\Override]
+    public function availableMoves(Position $position, Board $board): array
+    {
+        $row = $position->x;
+        $col = $position->y;
+
+        $knightMoves = [
+            [-2, -1],
+            [-2, 1],
+            [-1, -2],
+            [-1, 2],
+            [1, -2],
+            [1, 2],
+            [2, -1],
+            [2, 1],
+        ];
+
+        $moves = [];
+
+        foreach ($knightMoves as [$dx, $dy]) {
+            $newRow = $row + $dx;
+            $newCol = $col + $dy;
+
+            if ($newRow >= 0 && $newRow <= 7 && $newCol >= 0 && $newCol <= 7) {
+                $targetSquare = $board->getSquareByPosition(new Position($newRow, $newCol));
+                if (is_null($targetSquare->piece) || $targetSquare->piece->color !== $this->color) {
+                    $moves[] = $targetSquare->position;
+                }
+            }
+        }
+
+        return $moves;
     }
 }

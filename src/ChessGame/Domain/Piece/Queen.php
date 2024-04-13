@@ -15,11 +15,13 @@ class Queen extends Piece
         parent::__construct($color, Enum\PieceType::Queen);
     }
 
+    #[\Override]
     public function canMove(
         Position $startPosition,
         Position $endPosition,
         Board $board,
-        bool $withoutOwnColor = true
+        bool $withoutOwnColor = true,
+        bool $withoutKing = false
     ): bool {
         $startX = $startPosition->x;
         $startY = $startPosition->y;
@@ -29,7 +31,7 @@ class Queen extends Piece
 
         if (
             $withoutOwnColor &&
-            $endSquare->piece instanceof \Domain\ChessGame\Domain\Piece\Piece &&
+            $endSquare->piece instanceof Piece &&
             $endSquare->piece->color === $this->color
         ) {
             return false;
@@ -39,14 +41,20 @@ class Queen extends Piece
             if ($startX === $endX) {
                 $step = ($startY < $endY) ? 1 : -1;
                 for ($y = $startY + $step; $y !== $endY; $y += $step) {
-                    if ($board->squares[$y][$startX]->piece instanceof \Domain\ChessGame\Domain\Piece\Piece) {
+                    if (
+                        $board->squares[$y][$startX]->piece instanceof Piece &&
+                        (!$withoutKing || $board->squares[$y][$startX]->piece->type !== Enum\PieceType::King)
+                    ) {
                         return false;
                     }
                 }
             } else {
                 $step = ($startX < $endX) ? 1 : -1;
                 for ($x = $startX + $step; $x !== $endX; $x += $step) {
-                    if ($board->squares[$startY][$x]->piece instanceof \Domain\ChessGame\Domain\Piece\Piece) {
+                    if (
+                        $board->squares[$startY][$x]->piece instanceof Piece &&
+                        (!$withoutKing || $board->squares[$startY][$x]->piece->type !== Enum\PieceType::King)
+                    ) {
                         return false;
                     }
                 }
@@ -62,7 +70,7 @@ class Queen extends Piece
             $x = $startX + $dirX;
             $y = $startY + $dirY;
             while ($x !== $endX && $y !== $endY) {
-                if ($board->squares[$y][$x]->piece instanceof \Domain\ChessGame\Domain\Piece\Piece) {
+                if ($board->squares[$y][$x]->piece instanceof Piece) {
                     return false;
                 }
 
@@ -121,5 +129,22 @@ class Queen extends Piece
         }
 
         return $moves;
+    }
+
+    #[\Override]
+    public function availableMoves(Position $position, Board $board): array
+    {
+        $directions = [
+            [-1, 0],   // Up
+            [1, 0],    // Down
+            [0, -1],   // Left
+            [0, 1],    // Right
+            [-1, -1],  // Up-left
+            [-1, 1],   // Up-right
+            [1, -1],   // Down-left
+            [1, 1],    // Down-right
+        ];
+
+        return $this->getMovesOfPositionByDirections($directions, $position, $board);
     }
 }

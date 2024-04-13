@@ -15,28 +15,28 @@ final class GameProjection extends EventConsumer
     {
     }
 
-    public function handleGameEndedInDraw(Events\DrawAccepted $event, Message $message): void
+    public function handleGameEndedInDraw(Events\DrawAccepted $drawAccepted, Message $message): void
     {
-        $this->gameRepository->drawGame($event, $message);
+        $this->gameRepository->drawGame($drawAccepted, $message);
     }
 
-    public function handleGameEndedInResign(Events\GameEndedInResign $event, Message $message): void
+    public function handleGameEndedInResign(Events\GameEndedInResign $gameEndedInResign, Message $message): void
     {
-        $this->gameRepository->resignGame($event, $message);
+        $this->gameRepository->resignGame($gameEndedInResign, $message);
     }
 
-    public function handleGameWasStarted(Events\GameStarted $event, Message $message): void
+    public function handleGameWasStarted(Events\GameStarted $gameStarted, Message $message): void
     {
-        $this->gameRepository->startGame($event, $message);
+        $this->gameRepository->startGame($gameStarted, $message);
     }
 
-    public function handlePieceWasMoved(Events\PieceMoved $event, Message $message): void
+    public function handlePieceWasMoved(Events\PieceMoved $pieceMoved, Message $message): void
     {
-        $this->gameRepository->movePiece($event, $message);
+        $this->gameRepository->movePiece($pieceMoved, $message);
     }
 
-    public function handleHasCastled(Events\HasCastled $event, Message $message): void
+    public function handleHasCastled(Events\HasCastled $hasCastled, Message $message): void
     {
-        $this->gameRepository->castleKing($event, $message);
+        $this->gameRepository->castleKing($hasCastled, $message);
     }
 }

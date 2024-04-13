@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\DB;
 
 final class AggregateGameQueries implements IAggregateGameQueries
 {
-    public function getEventsByAggregateId(GameAggregateId $aggregateId): array
+    #[\Override]
+    public function getEventsByAggregateId(GameAggregateId $gameAggregateId): array
     {
         $result = DB::table('aggregate_game')
             ->select([
@@ -20,7 +21,7 @@ final class AggregateGameQueries implements IAggregateGameQueries
                 'version',
                 'payload',
             ])
-            ->whereRaw('aggregate_root_id = UUID_TO_BIN(?)', [$aggregateId->value])
+            ->whereRaw('aggregate_root_id = UUID_TO_BIN(?)', [$gameAggregateId->value])
             ->get()
             ->map(static fn (object $result): AggregateGame => new AggregateGame(
                 $result->event_id,

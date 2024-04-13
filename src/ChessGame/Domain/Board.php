@@ -20,9 +20,9 @@ use Exception;
 
 final class Board
 {
-    private const TOP_BOARD = 7;
+    private const int TOP_BOARD = 7;
 
-    private const BOTTOM_BOARD = 0;
+    private const int BOTTOM_BOARD = 0;
 
     /**
      * @param Square[][] $squares
@@ -33,7 +33,7 @@ final class Board
         public ?Position $lastMoveTo = null,
         public ?Position $removedPiece = null,
         public ?Position $checkedFrom = null,
-        public ?Move $kingCastling = null,
+        public ?Move $move = null,
         public Position $blackKingSquare = new Position(4, 7),
         public Position $whiteKingSquare = new Position(4, 0),
     ) {
@@ -212,23 +212,137 @@ final class Board
         return ($position->x >= 0 && $position->x < 8 && $position->y >= 0 && $position->y < 8);
     }
 
-    public function isCheckMate(Color $color): bool
+    /**
+     * @return Move[]
+     */
+    public function getAvailableMovesAgainstCheckMate(Color $color): array
     {
         $oppositeKing = $color === Color::White ? $this->whiteKingSquare : $this->blackKingSquare;
         $oppositeKingSquare = $this->getSquareByPosition($oppositeKing);
         $availableMoves = [];
 
         foreach (King::moves($oppositeKingSquare->position, $this) as $position) {
-            if (!$this->canTakePosition(Color::getOppositeColor($color), $position, false)) {
-                $availableMoves[] = $position;
+            if (!$this->canTakePosition(Color::getOppositeColor($color), $position, false, true)) {
+                $availableMoves[] = new Move($oppositeKingSquare->position, $position);
             }
         }
 
-        return $availableMoves === [];
+        return $availableMoves;
     }
 
-    public function canTakePosition(Color $color, Position $position, bool $withoutOwnColor = true): bool
+    public function checkIfKingCanMove(Color $color): bool
     {
+        $oppositeKing = $color === Color::White ? $this->whiteKingSquare : $this->blackKingSquare;
+        $oppositeKingSquare = $this->getSquareByPosition($oppositeKing);
+
+        foreach (King::moves($oppositeKingSquare->position, $this) as $position) {
+            if (!$this->canTakePosition(Color::getOppositeColor($color), $position, false, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function getPositionsPieceAndKing(
+        Position $endPosition,
+        Color $color,
+    ): array {
+        $oppositeKing = $color === Color::White ? $this->whiteKingSquare : $this->blackKingSquare;
+        $oppositeKingSquare = $this->getSquareByPosition($oppositeKing);
+
+        $startX = $endPosition->x;
+        $startY = $endPosition->y;
+        $endX = $oppositeKingSquare->position->x;
+        $endY = $oppositeKingSquare->position->y;
+        $piece = $this->getSquareByPosition($endPosition)->piece;
+        $positions = [];
+
+        if (
+            (
+                $piece->type === PieceType::Queen ||
+                $piece->type === PieceType::Rook
+            ) &&
+            $startX === $endX || $startY === $endY
+        ) {
+            if ($startX === $endX) {
+                $step = ($startY < $endY) ? 1 : -1;
+                for ($y = $startY + $step; $y !== $endY; $y += $step) {
+                    $positions[] = new Position($startX, $y);
+                }
+            } else {
+                $step = ($startX < $endX) ? 1 : -1;
+                for ($x = $startX + $step; $x !== $endX; $x += $step) {
+                    $positions[] = new Position($x, $startY);
+                }
+            }
+        }
+
+        if (
+            (
+                $piece->type === PieceType::Queen ||
+                $piece->type === PieceType::Bishop
+            ) &&
+            abs($endX - $startX) === abs($endY - $startY)
+        ) {
+            $dirX = ($endX > $startX) ? 1 : -1;
+            $dirY = ($endY > $startY) ? 1 : -1;
+            $x = $startX + $dirX;
+            $y = $startY + $dirY;
+            while ($x !== $endX && $y !== $endY) {
+                $positions[] = new Position($x, $y);
+                $x += $dirX;
+                $y += $dirY;
+            }
+        }
+
+        return $positions;
+    }
+
+    /**
+     * @return Move[]
+     */
+    public function getMovesToProtectKing(
+        Position $endPosition,
+        Color $color,
+    ): array {
+        $positions = $this->getPositionsPieceAndKing($endPosition, $color);
+        $positions[] = $endPosition;
+        $availableMoves = [];
+
+        foreach ($positions as $position) {
+            foreach ($this->getPositionsThatCanTake($color, $position, false, true) as $positionFrom) {
+                $availableMoves[] = new Move($positionFrom, $position);
+            }
+        }
+
+        return $availableMoves;
+    }
+
+    public function checkIfKingCanBeProtected(
+        Position $endPosition,
+        Color $color,
+    ): bool {
+        $positions = $this->getPositionsPieceAndKing($endPosition, $color);
+        $positions[] = $endPosition;
+
+
+        foreach ($positions as $position) {
+            if ($this->canTakePosition($color, $position, false, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getPositionsThatCanTake(
+        Color $color,
+        Position $position,
+        bool $withoutOwnColor = true,
+        bool $withoutKing = false
+    ): array {
+        $positions = [];
         foreach ($this->squares as $squareY) {
             foreach ($squareY as $square) {
                 if (is_null($square->piece)) {
@@ -239,7 +353,40 @@ final class Board
                     continue;
                 }
 
+                if ($withoutKing && $square->piece->type === PieceType::King) {
+                    continue;
+                }
+
                 if ($square->piece->canMove($square->position, $position, $this, $withoutOwnColor)) {
+                    $positions[] = $square->position;
+                }
+            }
+        }
+
+        return $positions;
+    }
+
+    public function canTakePosition(
+        Color $color,
+        Position $position,
+        bool $withoutOwnColor = true,
+        bool $withoutKing = false
+    ): bool {
+        foreach ($this->squares as $squareY) {
+            foreach ($squareY as $square) {
+                if (is_null($square->piece)) {
+                    continue;
+                }
+
+                if ($square->piece->color !== $color) {
+                    continue;
+                }
+
+                if ($withoutKing && $square->piece->type === PieceType::King) {
+                    continue;
+                }
+
+                if ($square->piece->canMove($square->position, $position, $this, $withoutOwnColor, $withoutKing)) {
                     return true;
                 }
             }
@@ -278,5 +425,45 @@ final class Board
         $square->piece = Piece::fromPieceType($square->color, $pieceType);
 
         return $square->piece;
+    }
+
+    public function randomMove(Color $color): Move
+    {
+        $squarePositions = [];
+
+        foreach ($this->squares as $squareY) {
+            foreach ($squareY as $square) {
+                if (is_null($square->piece)) {
+                    continue;
+                }
+
+                if ($square->piece->color !== $color) {
+                    continue;
+                }
+
+                if ($square->piece->type === PieceType::King) {
+                    continue;
+                }
+
+                $squarePositions[] = $square;
+            }
+        }
+
+        if ($squarePositions === []) {
+            throw new Exception('Random move is not available');
+        }
+
+        $availableMoves = [];
+        while ($availableMoves === []) {
+            /** @var Square $squarePosition */
+            $squarePosition = $squarePositions[array_rand($squarePositions)];
+
+            $availableMoves = $squarePosition->piece->availableMoves($squarePosition->position, $this);
+        }
+
+        /** @var Position $positionTo */
+        $positionTo = $availableMoves[array_rand($availableMoves)];
+
+        return new Move($squarePosition->position, $positionTo);
     }
 }

@@ -14,6 +14,9 @@ interface PieceInterface
         Position $startPosition,
         Position $endPosition,
         Board $board,
-        bool $withoutOwnColor = true
+        bool $withoutOwnColor = true,
+        bool $withoutKing = false
     ): bool;
+
+    public function availableMoves(Position $position, Board $board): array;
 }

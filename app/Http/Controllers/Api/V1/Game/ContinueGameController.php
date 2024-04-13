@@ -18,13 +18,13 @@ final class ContinueGameController extends Controller
 
     public function __invoke(string $uuid): JsonResponse
     {
-        $board = $this->gameHandler->handleContinueGame(new ContinueGameCommand(
+        $chessGame = $this->gameHandler->handleContinueGame(new ContinueGameCommand(
             $gameAggregateId = GameAggregateId::fromString($uuid),
         ));
 
         return new JsonResponse([
             'game_uuid' => $gameAggregateId->value,
-            'board' => $board->board
+            'board' => $chessGame->board
         ]);
     }
 }

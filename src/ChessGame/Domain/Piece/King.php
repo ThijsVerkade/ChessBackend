@@ -18,11 +18,13 @@ final class King extends Piece
         parent::__construct($color, Enum\PieceType::King);
     }
 
+    #[\Override]
     public function canMove(
         Position $startPosition,
         Position $endPosition,
         Board $board,
-        bool $withoutOwnColor = true
+        bool $withoutOwnColor = true,
+        bool $withoutKing = false
     ): bool {
         $startX = $startPosition->x;
         $startY = $startPosition->y;
@@ -82,7 +84,7 @@ final class King extends Piece
      */
     public static function moves(Position $position, Board $board): array
     {
-        $king = $board->getSquareByPosition($position);
+        $square = $board->getSquareByPosition($position);
         $positions = [
             new Position($position->x - 1, $position->y + 1), // left-up
             new Position($position->x, $position->y + 1), // up
@@ -99,7 +101,7 @@ final class King extends Piece
             if (
                 !$board->positionIsOnBoard($p) || (
                     !is_null($board->getSquareByPosition($p)->piece)
-                    && $board->getSquareByPosition($p)->piece->color === $king->piece->color
+                    && $board->getSquareByPosition($p)->piece->color === $square->piece->color
                 )
             ) {
                 unset($positions[$key]);
@@ -109,5 +111,11 @@ final class King extends Piece
         }
 
         return $positions;
+    }
+
+    #[\Override]
+    public function availableMoves(Position $position, Board $board): array
+    {
+        return array_values(self::moves($position, $board));
     }
 }

@@ -7,13 +7,14 @@ namespace Domain\ChessGame\Domain\Events;
 use Domain\ChessGame\Domain\Enum\Color;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
-final class DrawDeclined implements SerializablePayload
+final readonly class DrawDeclined implements SerializablePayload
 {
     public function __construct(
-        public readonly Color $decliningColor
+        public Color $decliningColor
     ) {
     }
 
+    #[\Override]
     public function toPayload(): array
     {
         return [
@@ -21,6 +22,7 @@ final class DrawDeclined implements SerializablePayload
         ];
     }
 
+    #[\Override]
     public static function fromPayload(array $payload): static
     {
         return new self(

@@ -9,22 +9,24 @@ use Domain\ChessGame\Domain\Enum\PieceType;
 use Domain\ChessGame\Domain\ValueObject\Position;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
-final class PieceCaptured implements SerializablePayload
+final readonly class PieceCaptured implements SerializablePayload
 {
     public function __construct(
-        public readonly PieceType $capturePiece,
-        public readonly Position $capturedPosition,
+        public PieceType $pieceType,
+        public Position $capturedPosition,
     ) {
     }
 
+    #[\Override]
     public function toPayload(): array
     {
         return [
-            'capture_piece' => $this->capturePiece->value,
+            'capture_piece' => $this->pieceType->value,
             'capture_position' => $this->capturedPosition->toString(),
         ];
     }
 
+    #[\Override]
     public static function fromPayload(array $payload): static
     {
         return new self(

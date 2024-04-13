@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Domain\ChessGame\Domain\Piece;
 
 use Domain\ChessGame\Domain;
+use Domain\ChessGame\Domain\Board;
 use Domain\ChessGame\Domain\Enum;
 use Domain\ChessGame\Domain\ValueObject\Position;
+use Exception;
 
 class Pawn extends Piece
 {
@@ -17,11 +19,13 @@ class Pawn extends Piece
         parent::__construct($color, Enum\PieceType::Pawn);
     }
 
+    #[\Override]
     public function canMove(
         Position $startPosition,
         Position $endPosition,
         Domain\Board $board,
-        bool $withoutOwnColor = true
+        bool $withoutOwnColor = true,
+        bool $withoutKing = false
     ): bool {
         $startX = $startPosition->x;
         $startY = $startPosition->y;
@@ -29,8 +33,17 @@ class Pawn extends Piece
         $endY = $endPosition->y;
         $endSquare = $board->getSquareByPosition($endPosition);
 
-        if (abs($startX - $endX) === 0 && is_null($endSquare->piece)) {
-            if (abs($startY - $endY) === 1) {
+        if (!$endSquare->piece instanceof \Domain\ChessGame\Domain\Piece\Piece && abs($startX - $endX) === 0) {
+            if (
+                (
+                    $startY - $endY === 1 &&
+                    $this->color === Enum\Color::Black
+                ) ||
+                (
+                    $startY - $endY === -1 &&
+                    $this->color === Enum\Color::White
+                )
+            ) {
                 return true;
             }
 
@@ -53,11 +66,11 @@ class Pawn extends Piece
         }
 
         if (
-            abs($startX - $endX) === 1 &&
             (
                 ($startY - $endY === 1 && $this->color === Enum\Color::Black) ||
                 ($startY - $endY === -1 && $this->color === Enum\Color::White)
-            )
+            ) &&
+            abs($startX - $endX) === 1
         ) {
             if (!is_null($endSquare->piece)) {
                 return $endSquare->piece->color !== $this->color && $withoutOwnColor;
@@ -84,5 +97,56 @@ class Pawn extends Piece
         }
 
         return false;
+    }
+
+    #[\Override]
+    public function availableMoves(Position $position, Board $board): array
+    {
+        $moves = [];
+        $row = $position->x;
+        $col = $position->y;
+
+        $direction = $this->color === Enum\Color::Black ? -1 : 1;
+
+        $moveDirections = [
+            [$direction, -1],         // Capture diagonal left
+            [$direction, 1],          // Capture diagonal right
+        ];
+
+        $newRow = $row;
+        $newCol = $col + $direction;
+
+        $targetSquare = $board->getSquareByPosition(new Position($newRow, $newCol));
+
+        if (is_null($targetSquare->piece)) {
+            $moves[] = $targetSquare->position;
+
+            // Check initial double move for pawns (only from starting rank)
+            $newCol = $col + (2 * $direction);
+            if (
+                ( $this->color === Enum\Color::Black && $col === 6) ||
+                ( $this->color === Enum\Color::White && $col === 1)
+            ) {
+                $targetSquare = $board->getSquareByPosition(new Position($newRow, $newCol));
+                if (is_null($targetSquare->piece)) {
+                    $moves[] = $targetSquare->position;
+                }
+            }
+        }
+
+        // Check diagonal captures
+        foreach ($moveDirections as [$dy, $dx]) {
+            $newRow = $row + $dx;
+            $newCol = $col + $dy;
+
+            if ($newRow >= 0 && $newRow <= 7 && $newCol >= 0 && $newCol <= 7) {
+                $targetSquare = $board->getSquareByPosition(new Position($newRow, $newCol));
+                if (!is_null($targetSquare->piece) && $targetSquare->piece->color !== $this->color) {
+                    $moves[] = $targetSquare->position;
+                }
+            }
+        }
+
+        return $moves;
     }
 }

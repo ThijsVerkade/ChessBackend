@@ -11,7 +11,9 @@ use Domain\ChessGame\Application\Commands\MovePieceCommand;
 use Domain\ChessGame\Application\Commands\ResignGameCommand;
 use Domain\ChessGame\Application\Commands\StartGameCommand;
 use Domain\ChessGame\Domain\ChessGame;
+use Domain\ChessGame\Domain\ValueObject\Position;
 use EventSauce\EventSourcing\AggregateRootRepository;
+use Exception;
 
 class GameHandler implements IGameHandler
 {
@@ -20,54 +22,96 @@ class GameHandler implements IGameHandler
     ) {
     }
 
-    public function handleStartGame(StartGameCommand $command): ChessGame
+    #[\Override]
+    public function handleStartGame(StartGameCommand $startGameCommand): ChessGame
     {
-        $chessGameAggregate = ChessGame::startGame($command->gameAggregateId);
+        $chessGameAggregate = ChessGame::startGame(
+            $startGameCommand->gameAggregateId,
+        );
         $this->aggregateRootRepository->persist($chessGameAggregate);
 
         return $chessGameAggregate;
     }
 
-    public function handleDrawGame(DrawGameCommand $command): void
+    #[\Override]
+    public function handleDrawGame(DrawGameCommand $drawGameCommand): void
     {
-        /** @var ChessGame $chessGameAggregate */
-        $chessGameAggregate = $this->aggregateRootRepository->retrieve($command->gameAggregateId);
+        /** @var ChessGame $aggregateRoot */
+        $aggregateRoot = $this->aggregateRootRepository->retrieve($drawGameCommand->gameAggregateId);
 
-        $this->aggregateRootRepository->persist($chessGameAggregate);
+        $this->aggregateRootRepository->persist($aggregateRoot);
     }
 
-    public function handleResignGame(ResignGameCommand $command): void
+    #[\Override]
+    public function handleResignGame(ResignGameCommand $resignGameCommand): void
     {
-        // TODO: Implement handleResignGame() method.
+        /** @var ChessGame $aggregateRoot */
+        $aggregateRoot = $this->aggregateRootRepository->retrieve($resignGameCommand->gameAggregateId);
+        $aggregateRoot->resign();
     }
 
-    public function handleMovePiece(MovePieceCommand $command): ChessGame
+    #[\Override]
+    public function handleMovePiece(MovePieceCommand $movePieceCommand): ChessGame
     {
-        /** @var ChessGame $chessGameAggregate */
-        $chessGameAggregate = $this->aggregateRootRepository->retrieve($command->gameAggregateId);
+        /** @var ChessGame $aggregateRoot */
+        $aggregateRoot = $this->aggregateRootRepository->retrieve($movePieceCommand->gameAggregateId);
 
-        $chessGameAggregate->movePiece($command->startPosition, $command->endPosition);
+        $aggregateRoot->movePiece($movePieceCommand->startPosition, $movePieceCommand->endPosition);
 
-        $this->aggregateRootRepository->persist($chessGameAggregate);
+        $this->aggregateRootRepository->persist($aggregateRoot);
 
-        return $chessGameAggregate;
+        return $aggregateRoot;
     }
 
-    public function handleContinueGame(ContinueGameCommand $command): ChessGame
+    #[\Override]
+    public function handleOpponentMove(Commands\OpponentMoveCommand $opponentMoveCommand): ChessGame
     {
-        /** @var ChessGame $chessGameAggregate */
-        $chessGameAggregate = $this->aggregateRootRepository->retrieve($command->gameAggregateId);
+        /** @var ChessGame $aggregateRoot */
+        $aggregateRoot = $this->aggregateRootRepository->retrieve($opponentMoveCommand->gameAggregateId);
 
-        return $chessGameAggregate;
+        $aggregateRoot->generateRandomBotMove();
+
+        $this->aggregateRootRepository->persist($aggregateRoot);
+
+        return $aggregateRoot;
     }
 
-    public function handlePromotePawn(Commands\PromotePawnCommand $command): ChessGame
+    #[\Override]
+    public function handleContinueGame(ContinueGameCommand $continueGameCommand): ChessGame
     {
-        /** @var ChessGame $chessGameAggregate */
-        $chessGameAggregate = $this->aggregateRootRepository->retrieve($command->gameAggregateId);
+        /** @var ChessGame $aggregateRoot */
+        $aggregateRoot = $this->aggregateRootRepository->retrieve($continueGameCommand->gameAggregateId);
 
-        $chessGameAggregate->promotePawn($command->position, $command->pieceType);
+        return $aggregateRoot;
+    }
 
-        return $chessGameAggregate;
+    #[\Override]
+    public function handlePromotePawn(Commands\PromotePawnCommand $promotePawnCommand): ChessGame
+    {
+        /** @var ChessGame $aggregateRoot */
+        $aggregateRoot = $this->aggregateRootRepository->retrieve($promotePawnCommand->gameAggregateId);
+
+        $aggregateRoot->promotePawn($promotePawnCommand->position, $promotePawnCommand->pieceType);
+
+        return $aggregateRoot;
+    }
+
+    /**
+     * @return Position[]
+     */
+    #[\Override]
+    public function handleGetAvailablePositions(
+        Commands\GetAvailablePositionsCommand $getAvailablePositionsCommand
+    ): array {
+        /** @var ChessGame $aggregateRoot */
+        $aggregateRoot = $this->aggregateRootRepository->retrieve($getAvailablePositionsCommand->gameAggregateId);
+
+        $square = $aggregateRoot->board->getSquareByPosition($getAvailablePositionsCommand->position);
+
+        if ($square->piece === null) {
+            throw new Exception('No piece available for this position');
+        }
+
+        return $square->piece->availableMoves($getAvailablePositionsCommand->position, $aggregateRoot->board);
     }
 }

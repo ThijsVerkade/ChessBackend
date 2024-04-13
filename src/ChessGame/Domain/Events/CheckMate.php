@@ -7,14 +7,15 @@ namespace Domain\ChessGame\Domain\Events;
 use Domain\ChessGame\Domain\Enum\Color;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
-final class CheckMate implements SerializablePayload
+final readonly class CheckMate implements SerializablePayload
 {
     public function __construct(
-        public readonly Color $winningColor,
-        public readonly Color $losingColor,
+        public Color $winningColor,
+        public Color $losingColor,
     ) {
     }
 
+    #[\Override]
     public function toPayload(): array
     {
         return [
@@ -23,6 +24,7 @@ final class CheckMate implements SerializablePayload
         ];
     }
 
+    #[\Override]
     public static function fromPayload(array $payload): static
     {
         return new self(

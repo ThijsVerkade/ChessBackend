@@ -21,13 +21,13 @@ final class StartGameController extends Controller
 
     public function __invoke(Request $request): JsonResponse
     {
-        $board = $this->gameHandler->handleStartGame(new StartGameCommand(
+        $chessGame = $this->gameHandler->handleStartGame(new StartGameCommand(
             $gameAggregateId = GameAggregateId::fromString(Str::uuid()->toString()),
         ));
 
         return new JsonResponse([
             'game_uuid' => $gameAggregateId->value,
-            'board' => $board->board
+            'board' => $chessGame->board
         ]);
     }
 }

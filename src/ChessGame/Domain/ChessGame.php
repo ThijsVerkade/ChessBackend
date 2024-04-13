@@ -7,6 +7,8 @@ namespace Domain\ChessGame\Domain;
 use Domain\ChessGame\Domain\Enum\Color;
 use Domain\ChessGame\Domain\Enum\PieceType;
 use Domain\ChessGame\Domain\Events\GameStarted;
+use Domain\ChessGame\Domain\ValueObject\Move;
+use Domain\ChessGame\Domain\ValueObject\Player;
 use Domain\ChessGame\Domain\ValueObject\Position;
 use Domain\ChessGame\Domain\ValueObject\Square;
 use EventSauce\EventSourcing\AggregateRoot;
@@ -22,16 +24,27 @@ final class ChessGame implements AggregateRoot
 
     private Color $turn;
 
+    private bool $check = false;
+
     private bool $checkmate = false;
 
     private bool $promotionPawnRequired = false;
 
+    public array $moves = [];
+
+    public Player $playerOne;
+
+    public ?Player $playerTwo = null;
+
+
     public static function startGame(
-        ValueObject\GameAggregateId $gameAggregateId
+        ValueObject\GameAggregateId $gameAggregateId,
     ): self {
         $game = new self($gameAggregateId);
         $game->board = Board::setupBoard();
         $game->recordThat(new GameStarted());
+        $game->playerOne = new Player('John');
+        $game->playerTwo = null;
 
         return $game;
     }
@@ -50,7 +63,7 @@ final class ChessGame implements AggregateRoot
     public function movePiece(Position $startPosition, Position $endPosition): void
     {
         if ($this->checkmate) {
-            throw new Exception('game already finished with checkmate');
+            throw new Exception('game already finished');
         }
 
         if ($this->promotionPawnRequired) {
@@ -94,17 +107,48 @@ final class ChessGame implements AggregateRoot
             $this->recordThat(new Events\PromotePawnRequired($endPosition, $this->turn));
         }
 
+        $this->checkIfCheckOrCheckMate($endPosition, $oppositeColor);
+    }
+
+    private function checkIfCheckOrCheckMate(
+        Position $endPosition,
+        Color $oppositeColor
+    ): void {
+        $endSquare = $this->board->getSquareByPosition($endPosition);
+
         if ($this->board->colorGivesCheck($oppositeColor)) {
             throw new Exception('invalid move, gives check');
         }
 
         if ($this->board->pieceGivesCheck($endSquare) || $this->board->colorGivesCheck($this->turn)) {
             $this->recordThat(new Events\Check($oppositeColor, $endSquare->position));
-
-            if ($this->board->isCheckMate($oppositeColor)) {
+            if (
+                !$this->board->checkIfKingCanMove($oppositeColor) &&
+                !$this->board->checkIfKingCanBeProtected($endPosition, $oppositeColor)
+            ) {
                 $this->checkmate = true;
                 $this->recordThat(new Events\CheckMate(winningColor: $this->turn, losingColor: $oppositeColor));
             }
+        }
+    }
+
+    public function generateRandomBotMove(): void
+    {
+        if ($this->checkmate) {
+            return;
+        }
+
+        if ($this->check) {
+            $availableMoves = $this->board->getAvailableMovesAgainstCheckMate($this->turn);
+            $availableMoves[] = $this->board->getMovesToProtectKing($this->board->lastMoveTo, $this->turn);
+
+            $move = $availableMoves[array_rand($availableMoves)];
+
+            $this->movePiece($move->from, $move->to);
+        } else {
+            $move = $this->board->randomMove($this->turn);
+
+            $this->movePiece($move->from, $move->to);
         }
     }
 
@@ -113,5 +157,12 @@ final class ChessGame implements AggregateRoot
         $piece = $this->board->promotePawn($position, $pieceType);
         $this->promotionPawnRequired = false;
         $this->recordThat(new Events\PromotePawn($position, $piece->color, $pieceType));
+    }
+
+    public function resign(): void
+    {
+        $this->checkmate = true;
+        $oppositeColor = Color::getOppositeColor($this->turn);
+        $this->recordThat(new Events\CheckMate(winningColor: $oppositeColor, losingColor: $this->turn));
     }
 }

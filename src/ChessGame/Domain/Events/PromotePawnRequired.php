@@ -9,14 +9,15 @@ use Domain\ChessGame\Domain\Enum\PieceType;
 use Domain\ChessGame\Domain\ValueObject\Position;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
-final class PromotePawnRequired implements SerializablePayload
+final readonly class PromotePawnRequired implements SerializablePayload
 {
     public function __construct(
-        public readonly Position $position,
-        public readonly Color $color,
+        public Position $position,
+        public Color $color,
     ) {
     }
 
+    #[\Override]
     public function toPayload(): array
     {
         return [
@@ -25,6 +26,7 @@ final class PromotePawnRequired implements SerializablePayload
         ];
     }
 
+    #[\Override]
     public static function fromPayload(array $payload): static
     {
         return new self(

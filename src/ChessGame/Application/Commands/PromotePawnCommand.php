@@ -8,12 +8,12 @@ use Domain\ChessGame\Domain\Enum\PieceType;
 use Domain\ChessGame\Domain\ValueObject\GameAggregateId;
 use Domain\ChessGame\Domain\ValueObject\Position;
 
-final class PromotePawnCommand
+final readonly class PromotePawnCommand
 {
     public function __construct(
-        public readonly GameAggregateId $gameAggregateId,
-        public readonly Position $position,
-        public readonly PieceType $pieceType,
+        public GameAggregateId $gameAggregateId,
+        public Position $position,
+        public PieceType $pieceType,
     ) {
     }
 }

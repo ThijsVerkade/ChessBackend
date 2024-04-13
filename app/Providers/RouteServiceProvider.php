@@ -17,11 +17,12 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    final public const HOME = '/home';
+    final public const string HOME = '/home';
 
     /**
      * Define your route model bindings, pattern filters, and other route configuration.
      */
+    #[\Override]
     public function boot(): void
     {
         $this->configureRateLimiting();

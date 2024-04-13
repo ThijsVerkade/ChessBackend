@@ -25,11 +25,13 @@ use Illuminate\Support\ServiceProvider;
 
 class GameProvider extends ServiceProvider
 {
+    #[\Override]
     public function register()
     {
         $this->app->bind(
             AggregateRootRepository::class,
-            static fn(Application $app): EventSourcedAggregateRootRepository => new EventSourcedAggregateRootRepository(
+            static fn(Application $application): EventSourcedAggregateRootRepository =>
+            new EventSourcedAggregateRootRepository(
                 ChessGame::class,
                 new IlluminateUuidV4MessageRepository(
                     connection: DB::connection(),
@@ -39,7 +41,7 @@ class GameProvider extends ServiceProvider
                     uuidEncoder: new BinaryUuidEncoder(),
                 ),
                 new SynchronousMessageDispatcher(
-                    $app->make(GameProjection::class),
+                    $application->make(GameProjection::class),
                 )
             )
         );

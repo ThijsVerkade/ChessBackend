@@ -15,11 +15,13 @@ final class Bishop extends Piece
         parent::__construct($color, Enum\PieceType::Bishop);
     }
 
+    #[\Override]
     public function canMove(
         Position $startPosition,
         Position $endPosition,
         Board $board,
-        bool $withoutOwnColor = true
+        bool $withoutOwnColor = true,
+        bool $withoutKing = false
     ): bool {
         $startX = $startPosition->x;
         $startY = $startPosition->y;
@@ -38,7 +40,10 @@ final class Bishop extends Piece
         $x = $startX + $dirX;
         $y = $startY + $dirY;
         while ($x !== $endX && $y !== $endY) {
-            if ($board->squares[$y][$x]->piece instanceof \Domain\ChessGame\Domain\Piece\Piece) {
+            if (
+                $board->squares[$y][$x]->piece instanceof Piece &&
+                (!$withoutKing || $board->squares[$y][$x]->piece->type !== Enum\PieceType::King)
+            ) {
                 return false;
             }
 
@@ -51,11 +56,25 @@ final class Bishop extends Piece
             return true;
         }
 
-        if (!$endSquare->piece instanceof \Domain\ChessGame\Domain\Piece\Piece) {
+        if (!$endSquare->piece instanceof Piece) {
             // If all checks pass, the move is valid
             return true;
         }
+
         // If all checks pass, the move is valid
         return $endSquare->piece->color !== $this->color;
+    }
+
+    #[\Override]
+    public function availableMoves(Position $position, Board $board): array
+    {
+        $directions = [
+            [-1, -1], // Down - left
+            [-1, 1],  // Down - right
+            [1, -1],  // Up - left
+            [1, 1],   // Up - right
+        ];
+
+        return $this->getMovesOfPositionByDirections($directions, $position, $board);
     }
 }

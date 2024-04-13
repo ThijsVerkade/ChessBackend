@@ -8,5 +8,5 @@ use Domain\ChessGame\Domain\ValueObject\GameAggregateId;
 
 interface IAggregateGameQueries
 {
-    public function getEventsByAggregateId(GameAggregateId $aggregateId): array;
+    public function getEventsByAggregateId(GameAggregateId $gameAggregateId): array;
 }

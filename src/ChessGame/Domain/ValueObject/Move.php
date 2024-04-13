@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Domain\ChessGame\Domain\ValueObject;
 
-final class Move
+final readonly class Move
 {
     public function __construct(
-        public readonly Position $from,
-        public readonly Position $to,
+        public Position $from,
+        public Position $to,
     ) {
     }
 }
