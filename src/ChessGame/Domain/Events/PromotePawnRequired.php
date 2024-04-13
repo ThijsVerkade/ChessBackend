@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Domain\Events;
+namespace Src\ChessGame\Domain\Events;
 
-use Domain\ChessGame\Domain\Enum\Color;
-use Domain\ChessGame\Domain\Enum\PieceType;
-use Domain\ChessGame\Domain\ValueObject\Position;
+use Src\ChessGame\Domain\Enum\Color;
+use Src\ChessGame\Domain\Enum\PieceType;
+use Src\ChessGame\Domain\ValueObject\Position;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
 final readonly class PromotePawnRequired implements SerializablePayload

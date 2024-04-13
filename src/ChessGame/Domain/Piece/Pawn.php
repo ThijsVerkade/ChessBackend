@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Domain\Piece;
+namespace Src\ChessGame\Domain\Piece;
 
-use Domain\ChessGame\Domain;
-use Domain\ChessGame\Domain\Board;
-use Domain\ChessGame\Domain\Enum;
-use Domain\ChessGame\Domain\ValueObject\Position;
+use Src\ChessGame\Domain;
+use Src\ChessGame\Domain\Board;
+use Src\ChessGame\Domain\Enum;
+use Src\ChessGame\Domain\ValueObject\Position;
 use Exception;
 
 class Pawn extends Piece
@@ -23,7 +23,7 @@ class Pawn extends Piece
     public function canMove(
         Position $startPosition,
         Position $endPosition,
-        Domain\Board $board,
+        Src\Board $board,
         bool $withoutOwnColor = true,
         bool $withoutKing = false
     ): bool {
@@ -33,7 +33,7 @@ class Pawn extends Piece
         $endY = $endPosition->y;
         $endSquare = $board->getSquareByPosition($endPosition);
 
-        if (!$endSquare->piece instanceof \Domain\ChessGame\Domain\Piece\Piece && abs($startX - $endX) === 0) {
+        if (!$endSquare->piece instanceof \Src\ChessGame\Domain\Piece\Piece && abs($startX - $endX) === 0) {
             if (
                 (
                     $startY - $endY === 1 &&

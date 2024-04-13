@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Infrastructure\Read;
+namespace Src\ChessGame\Infrastructure\Read;
 
-use Domain\ChessGame\Application\Read\IAggregateGameQueries;
-use Domain\ChessGame\Application\Read\Models\AggregateGame;
-use Domain\ChessGame\Domain\ValueObject\GameAggregateId;
+use Src\ChessGame\Application\Read\IAggregateGameQueries;
+use Src\ChessGame\Application\Read\Models\AggregateGame;
+use Src\ChessGame\Domain\ValueObject\GameAggregateId;
 use Illuminate\Support\Facades\DB;
 
 final class AggregateGameQueries implements IAggregateGameQueries

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Domain;
+namespace Src\ChessGame\Domain;
 
-use Domain\ChessGame\Domain\Enum\Color;
-use Domain\ChessGame\Domain\Enum\PieceType;
-use Domain\ChessGame\Domain\Events\GameStarted;
-use Domain\ChessGame\Domain\ValueObject\Move;
-use Domain\ChessGame\Domain\ValueObject\Player;
-use Domain\ChessGame\Domain\ValueObject\Position;
-use Domain\ChessGame\Domain\ValueObject\Square;
+use Src\ChessGame\Domain\Enum\Color;
+use Src\ChessGame\Domain\Enum\PieceType;
+use Src\ChessGame\Domain\Events\GameStarted;
+use Src\ChessGame\Domain\ValueObject\Move;
+use Src\ChessGame\Domain\ValueObject\Player;
+use Src\ChessGame\Domain\ValueObject\Position;
+use Src\ChessGame\Domain\ValueObject\Square;
 use EventSauce\EventSourcing\AggregateRoot;
 use EventSauce\EventSourcing\AggregateRootBehaviour;
 use Exception;

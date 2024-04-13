@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Domain\ValueObject;
+namespace Src\ChessGame\Domain\ValueObject;
 
-use Domain\ChessGame\Domain\Enum\Color;
-use Domain\ChessGame\Domain\Piece\Piece;
+use Src\ChessGame\Domain\Enum\Color;
+use Src\ChessGame\Domain\Piece\Piece;
 
 final class Square
 {

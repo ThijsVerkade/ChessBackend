@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use Domain\ChessGame\Application\Handlers\GameHandler;
-use Domain\ChessGame\Application\Handlers\IGameHandler;
-use Domain\ChessGame\Application\Projectors\GameProjection;
-use Domain\ChessGame\Application\Read\IAggregateGameQueries;
-use Domain\ChessGame\Domain\ChessGame;
-use Domain\ChessGame\Domain\Repositories\IGameRepository;
-use Domain\ChessGame\Infrastructure\Persistence\GameRepository;
-use Domain\ChessGame\Infrastructure\Read\AggregateGameQueries;
+use Src\ChessGame\Application\Handlers\GameHandler;
+use Src\ChessGame\Application\Handlers\IGameHandler;
+use Src\ChessGame\Application\Projectors\GameProjection;
+use Src\ChessGame\Application\Read\IAggregateGameQueries;
+use Src\ChessGame\Domain\ChessGame;
+use Src\ChessGame\Domain\Repositories\IGameRepository;
+use Src\ChessGame\Infrastructure\Persistence\GameRepository;
+use Src\ChessGame\Infrastructure\Read\AggregateGameQueries;
 use EventSauce\EventSourcing\AggregateRootRepository;
 use EventSauce\EventSourcing\EventSourcedAggregateRootRepository;
 use EventSauce\EventSourcing\Serialization\ConstructingMessageSerializer;

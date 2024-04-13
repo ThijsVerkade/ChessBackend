@@ -1,8 +1,8 @@
-FROM php:8.2-fpm
+FROM php:8.3
 WORKDIR /var/www
 
 RUN docker-php-ext-install pdo_mysql
-RUN pecl install xdebug redis && docker-php-ext-enable xdebug redis
+RUN pecl install xdebug zip && docker-php-ext-enable xdebug zip
 
 RUN apt-get update -y && apt-get install -y git
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Domain\ValueObject;
+namespace Src\ChessGame\Domain\ValueObject;
 
 final readonly class Player
 {

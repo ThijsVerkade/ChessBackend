@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Application\Handlers;
+namespace Src\ChessGame\Application\Handlers;
 
-use Domain\ChessGame\Application\Commands;
-use Domain\ChessGame\Application\Commands\ContinueGameCommand;
-use Domain\ChessGame\Application\Commands\DrawGameCommand;
-use Domain\ChessGame\Application\Commands\MovePieceCommand;
-use Domain\ChessGame\Application\Commands\ResignGameCommand;
-use Domain\ChessGame\Application\Commands\StartGameCommand;
-use Domain\ChessGame\Domain\ChessGame;
-use Domain\ChessGame\Domain\ValueObject\Position;
+use Src\ChessGame\Application\Commands;
+use Src\ChessGame\Application\Commands\ContinueGameCommand;
+use Src\ChessGame\Application\Commands\DrawGameCommand;
+use Src\ChessGame\Application\Commands\MovePieceCommand;
+use Src\ChessGame\Application\Commands\ResignGameCommand;
+use Src\ChessGame\Application\Commands\StartGameCommand;
+use Src\ChessGame\Domain\ChessGame;
+use Src\ChessGame\Domain\ValueObject\Position;
 use EventSauce\EventSourcing\AggregateRootRepository;
 use Exception;
 

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Application\Services;
+namespace Src\ChessGame\Application\Services;
 
-use Domain\ChessGame\Domain\ChessGame;
-use Domain\ChessGame\Domain\Enum\RenderableFileType;
-use Domain\ChessGame\Domain\Repositories\IGameRepository;
-use Domain\ChessGame\Domain\ValueObject\GameAggregateId;
-use Domain\ChessGame\Domain\ValueObject\Square;
+use Src\ChessGame\Domain\ChessGame;
+use Src\ChessGame\Domain\Enum\RenderableFileType;
+use Src\ChessGame\Domain\Repositories\IGameRepository;
+use Src\ChessGame\Domain\ValueObject\GameAggregateId;
+use Src\ChessGame\Domain\ValueObject\Square;
 use EventSauce\EventSourcing\AggregateRootRepository;
 
 class ChessboardRendererService

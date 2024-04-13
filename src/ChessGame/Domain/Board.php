@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Domain;
+namespace Src\ChessGame\Domain;
 
-use Domain\ChessGame\Domain\Enum\Color;
-use Domain\ChessGame\Domain\Enum\PieceType;
-use Domain\ChessGame\Domain\Piece\Bishop;
-use Domain\ChessGame\Domain\Piece\King;
-use Domain\ChessGame\Domain\Piece\Knight;
-use Domain\ChessGame\Domain\Piece\Pawn;
-use Domain\ChessGame\Domain\Piece\Piece;
-use Domain\ChessGame\Domain\Piece\Queen;
-use Domain\ChessGame\Domain\Piece\Rook;
-use Domain\ChessGame\Domain\ValueObject\Move;
-use Domain\ChessGame\Domain\ValueObject\Position;
-use Domain\ChessGame\Domain\ValueObject\Square;
+use Src\ChessGame\Domain\Enum\Color;
+use Src\ChessGame\Domain\Enum\PieceType;
+use Src\ChessGame\Domain\Piece\Bishop;
+use Src\ChessGame\Domain\Piece\King;
+use Src\ChessGame\Domain\Piece\Knight;
+use Src\ChessGame\Domain\Piece\Pawn;
+use Src\ChessGame\Domain\Piece\Piece;
+use Src\ChessGame\Domain\Piece\Queen;
+use Src\ChessGame\Domain\Piece\Rook;
+use Src\ChessGame\Domain\ValueObject\Move;
+use Src\ChessGame\Domain\ValueObject\Position;
+use Src\ChessGame\Domain\ValueObject\Square;
 use Exception;
 
 final class Board

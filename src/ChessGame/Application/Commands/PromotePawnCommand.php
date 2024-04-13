@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Application\Commands;
+namespace Src\ChessGame\Application\Commands;
 
-use Domain\ChessGame\Domain\Enum\PieceType;
-use Domain\ChessGame\Domain\ValueObject\GameAggregateId;
-use Domain\ChessGame\Domain\ValueObject\Position;
+use Src\ChessGame\Domain\Enum\PieceType;
+use Src\ChessGame\Domain\ValueObject\GameAggregateId;
+use Src\ChessGame\Domain\ValueObject\Position;
 
 final readonly class PromotePawnCommand
 {

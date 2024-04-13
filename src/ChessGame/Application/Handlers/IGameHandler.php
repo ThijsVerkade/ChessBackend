@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Application\Handlers;
+namespace Src\ChessGame\Application\Handlers;
 
-use Domain\ChessGame\Application\Commands;
-use Domain\ChessGame\Domain\ChessGame;
-use Domain\ChessGame\Domain\ValueObject\Position;
+use Src\ChessGame\Application\Commands;
+use Src\ChessGame\Domain\ChessGame;
+use Src\ChessGame\Domain\ValueObject\Position;
 
 interface IGameHandler
 {

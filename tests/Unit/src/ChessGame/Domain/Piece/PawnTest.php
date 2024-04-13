@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Unit\src\ChessGame\Domain\Piece;
 
-use Domain\ChessGame\Domain\Board;
-use Domain\ChessGame\Domain\Piece\Knight;
-use Domain\ChessGame\Domain\Piece\Pawn;
-use Domain\ChessGame\Domain\ValueObject\Position;
+use Src\ChessGame\Domain\Board;
+use Src\ChessGame\Domain\Piece\Knight;
+use Src\ChessGame\Domain\Piece\Pawn;
+use Src\ChessGame\Domain\ValueObject\Position;
 use PHPUnit\Framework\TestCase;
 
 final class PawnTest extends TestCase

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Domain\Enum;
+namespace Src\ChessGame\Domain\Enum;
 
 enum PiecePoint: int
 {

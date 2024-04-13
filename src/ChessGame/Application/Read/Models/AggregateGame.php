@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Application\Read\Models;
+namespace Src\ChessGame\Application\Read\Models;
 
 final readonly class AggregateGame
 {

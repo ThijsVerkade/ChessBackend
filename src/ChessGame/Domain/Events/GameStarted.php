@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Domain\Events;
+namespace Src\ChessGame\Domain\Events;
 
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 

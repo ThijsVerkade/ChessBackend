@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Infrastructure\Persistence;
+namespace Src\ChessGame\Infrastructure\Persistence;
 
-use Domain\ChessGame\Domain\Events;
-use Domain\ChessGame\Domain\Repositories\IGameRepository;
+use Src\ChessGame\Domain\Events;
+use Src\ChessGame\Domain\Repositories\IGameRepository;
 use EventSauce\EventSourcing\Message;
 use Illuminate\Support\Facades\DB;
 

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Domain\Events;
+namespace Src\ChessGame\Domain\Events;
 
-use Domain\ChessGame\Domain\Enum\Color;
+use Src\ChessGame\Domain\Enum\Color;
 use EventSauce\EventSourcing\Serialization\SerializablePayload;
 
 final readonly class DrawAccepted implements SerializablePayload

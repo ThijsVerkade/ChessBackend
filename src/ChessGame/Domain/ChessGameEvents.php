@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Domain\ChessGame\Domain;
+namespace Src\ChessGame\Domain;
 
-use Domain\ChessGame\Domain\Enum\Color;
+use Src\ChessGame\Domain\Enum\Color;
 
 trait ChessGameEvents
 {

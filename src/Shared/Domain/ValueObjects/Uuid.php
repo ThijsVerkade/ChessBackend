@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Domain\Shared\Domain\ValueObjects;
+namespace Src\Shared\Domain\ValueObjects;
 
 use InvalidArgumentException;
 use Ramsey\Uuid\Uuid as RamseyUuid;
